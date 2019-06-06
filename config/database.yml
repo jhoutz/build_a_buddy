@@ -1,0 +1,11 @@
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: build_a_buddy_test
+  host: localhost
+
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: build_a_buddy_development
+  host: localhost
