@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_07_134103) do
+ActiveRecord::Schema.define(version: 2019_06_07_214504) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,47 @@ ActiveRecord::Schema.define(version: 2019_06_07_134103) do
     t.index ["product_type", "product_id"], name: "index_item_products_on_product_type_and_product_id"
   end
 
+  create_table "item_sizes", force: :cascade do |t|
+    t.bigint "item_id"
+    t.bigint "item_product_id"
+    t.bigint "size_id"
+    t.integer "quantity"
+    t.float "cost"
+    t.float "sale_price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_item_sizes_on_item_id"
+    t.index ["item_product_id"], name: "index_item_sizes_on_item_product_id"
+    t.index ["size_id"], name: "index_item_sizes_on_size_id"
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "purchase_order_items", force: :cascade do |t|
+    t.bigint "purchase_order_id"
+    t.bigint "item_size_id"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_size_id"], name: "index_purchase_order_items_on_item_size_id"
+    t.index ["purchase_order_id"], name: "index_purchase_order_items_on_purchase_order_id"
+  end
+
+  create_table "purchase_orders", force: :cascade do |t|
+    t.datetime "order_datetime"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "sizes", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "stuffed_animal_accessories", force: :cascade do |t|
     t.bigint "stuffed_animal_id"
     t.bigint "accessory_id"
@@ -46,6 +87,11 @@ ActiveRecord::Schema.define(version: 2019_06_07_134103) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "item_sizes", "item_products"
+  add_foreign_key "item_sizes", "items"
+  add_foreign_key "item_sizes", "sizes"
+  add_foreign_key "purchase_order_items", "item_sizes"
+  add_foreign_key "purchase_order_items", "purchase_orders"
   add_foreign_key "stuffed_animal_accessories", "accessories"
   add_foreign_key "stuffed_animal_accessories", "stuffed_animals"
 end
