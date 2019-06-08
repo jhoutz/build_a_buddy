@@ -16,14 +16,15 @@ gem 'uglifier', '>= 1.3.0'
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'database_cleaner'
+  gem 'factory_bot_rails'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.8'
   gem 'rubocop-rails', require: false
-  gem 'factory_girl_rails'
 end
 
 group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'rb-readline'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'web-console', '>= 3.3.0'
