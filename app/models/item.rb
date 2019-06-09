@@ -3,7 +3,7 @@ class Item < ApplicationRecord
   has_one :stuffed_animal, through: :item_product, source: :product, source_type: 'StuffedAnimal'
   has_one :accessory, through: :item_product, source: :product, source_type: 'Accessory'
   has_many :item_sizes
-  has_many :sizes, through: :item_sizes
+  has_many :sizes, through: :item_sizes, dependent: :destroy
   accepts_nested_attributes_for :item_product, allow_destroy: true
 
   def self.kinds
