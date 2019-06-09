@@ -11,10 +11,10 @@ class CsvDataImporter
       csv = CSV.new(f, headers: false)
       csv.to_a.each do |row|
         if file == :inventory
-          process_inv_import_el(StuffedAnimal, row[0], 'all', row[1], nil, nil)
+          process_inv_import_el(StuffedAnimal, row[0], 'All', row[1], nil, nil)
           process_inv_import_el(Accessory, row[3], row[4], row[5], nil, nil)
         elsif file == :product_prices
-          process_inv_import_el(StuffedAnimal, row[0], 'all', nil, row[1], row[2])
+          process_inv_import_el(StuffedAnimal, row[0], 'All', nil, row[1], row[2])
           process_inv_import_el(Accessory, row[4], row[5], nil, row[6], row[7])
         end
       end
@@ -24,6 +24,8 @@ class CsvDataImporter
   private
 
   def process_inv_import_el(model, desc, size, qty, cost, sale_price)
+    return if desc.blank?
+
     model.transaction do
       model_inst = model.where(description: desc).first_or_create
       model_inst_item = Item.joins(:item_product).where(item_products: { product: model_inst }).first
@@ -32,14 +34,14 @@ class CsvDataImporter
         model_inst_item.build_item_product(product: model.where(description: desc).first_or_create)
         model_inst_item.save
       end
-      model_inst_size = model_inst_item.sizes.where(name: size).first_or_create
-      model_inst_item_variation = model_inst_item.item_variations.find_by(size: model_inst_size)
+      model_inst_size = Size.where(name: size).first_or_create
+      model_inst_item.sizes << model_inst_size unless model_inst_item.sizes.include? model_inst_size
+      model_inst_item_variation = model_inst_item.item_variations.where(size: model_inst_size).first_or_create
       if model_inst_item_variation.present?
-        model_inst_item_variation.update_attributes(
-          quantity: qty.to_i,
-          cost: cost.to_f,
-          sale_price: sale_price.to_f
-        )
+        model_inst_item_variation.quantity = qty.to_i unless qty.blank?
+        model_inst_item_variation.cost = cost.to_f unless cost.blank?
+        model_inst_item_variation.sale_price = sale_price.to_f unless sale_price.blank?
+        model_inst_item_variation.save
       end
     end
   end
