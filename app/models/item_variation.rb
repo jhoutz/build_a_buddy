@@ -2,8 +2,8 @@ class ItemVariation < ApplicationRecord
   belongs_to :item
   belongs_to :size
   has_many :purchase_order_items
-  has_many :compatible_products, class_name: 'ItemVariationPairing'
-  has_many :item_variation_pairings, through: :compatible_products, source: :item_variation_pairing
+  has_many :item_var_pairings
+  has_many :compat_items, through: :item_var_pairings
 
   def product
     item.product
