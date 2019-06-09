@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20_190_607_214_504) do
     t.index %w[product_type product_id], name: 'index_item_products_on_product_type_and_product_id'
   end
 
-  create_table 'item_sizes', force: :cascade do |t|
+  create_table 'item_variations', force: :cascade do |t|
     t.bigint 'item_id'
     t.bigint 'item_product_id'
     t.bigint 'size_id'
@@ -39,9 +39,9 @@ ActiveRecord::Schema.define(version: 20_190_607_214_504) do
     t.float 'sale_price'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-    t.index ['item_id'], name: 'index_item_sizes_on_item_id'
-    t.index ['item_product_id'], name: 'index_item_sizes_on_item_product_id'
-    t.index ['size_id'], name: 'index_item_sizes_on_size_id'
+    t.index ['item_id'], name: 'index_item_variations_on_item_id'
+    t.index ['item_product_id'], name: 'index_item_variations_on_item_product_id'
+    t.index ['size_id'], name: 'index_item_variations_on_size_id'
   end
 
   create_table 'items', force: :cascade do |t|
@@ -51,11 +51,11 @@ ActiveRecord::Schema.define(version: 20_190_607_214_504) do
 
   create_table 'purchase_order_items', force: :cascade do |t|
     t.bigint 'purchase_order_id'
-    t.bigint 'item_size_id'
+    t.bigint 'item_variation_id'
     t.integer 'quantity'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-    t.index ['item_size_id'], name: 'index_purchase_order_items_on_item_size_id'
+    t.index ['item_variation_id'], name: 'index_purchase_order_items_on_item_variation_id'
     t.index ['purchase_order_id'], name: 'index_purchase_order_items_on_purchase_order_id'
   end
 
@@ -86,10 +86,10 @@ ActiveRecord::Schema.define(version: 20_190_607_214_504) do
     t.datetime 'updated_at', null: false
   end
 
-  add_foreign_key 'item_sizes', 'item_products'
-  add_foreign_key 'item_sizes', 'items'
-  add_foreign_key 'item_sizes', 'sizes'
-  add_foreign_key 'purchase_order_items', 'item_sizes'
+  add_foreign_key 'item_variations', 'item_products'
+  add_foreign_key 'item_variations', 'items'
+  add_foreign_key 'item_variations', 'sizes'
+  add_foreign_key 'purchase_order_items', 'item_variations'
   add_foreign_key 'purchase_order_items', 'purchase_orders'
   add_foreign_key 'stuffed_animal_accessories', 'accessories'
   add_foreign_key 'stuffed_animal_accessories', 'stuffed_animals'

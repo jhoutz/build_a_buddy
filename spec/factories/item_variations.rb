@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :item_size do
+  factory :item_variation do
     item nil
     size nil
   end

@@ -33,9 +33,9 @@ class CsvDataImporter
         model_inst_item.save
       end
       model_inst_size = model_inst_item.sizes.where(name: size).first_or_create
-      model_inst_item_size = model_inst_item.item_sizes.find_by(size: model_inst_size)
-      if model_inst_item_size.present?
-        model_inst_item_size.update_attributes(
+      model_inst_item_variation = model_inst_item.item_variations.find_by(size: model_inst_size)
+      if model_inst_item_variation.present?
+        model_inst_item_variation.update_attributes(
           quantity: qty.to_i,
           cost: cost.to_f,
           sale_price: sale_price.to_f

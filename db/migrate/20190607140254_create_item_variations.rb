@@ -1,6 +1,6 @@
-class CreateItemSizes < ActiveRecord::Migration[5.2]
+class CreateItemVariations < ActiveRecord::Migration[5.2]
   def change
-    create_table :item_sizes do |t|
+    create_table :item_variations do |t|
       t.references :item, foreign_key: true
       t.references :item_product, foreign_key: true
       t.references :size, foreign_key: true
