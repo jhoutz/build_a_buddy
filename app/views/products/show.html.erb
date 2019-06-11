@@ -1,0 +1,35 @@
+<div style="text-align: center">
+  <%= link_to "<< Back", products_path %>
+  <br />
+  <h1>Product: <%= @item.product.description %></h1>
+  <br />
+  <%= form_tag item_var_recommendations_path, method: :get, remote: true do %>
+  Select Size to View Recommendations:
+  <%= select_tag :size, options_for_select(@item.sizes.map{|size| [size.name.titleize, size.name]}), prompt: "Select Size" %>
+  <%= hidden_field_tag :item_id, @item.id %>
+  <% end %>
+
+  <br />
+  <div id="related_products">
+    <span></span>
+    <table align="center" id="related_products_table"></table>
+  </div>
+</div>
+
+<script>
+  $(function(){
+    $('#size').change(function() {
+        $('form').submit().on('ajax:success', function(e, data, status, xhr){
+          $("#related_products span").html("Other Customers Purchased:");
+          $("#related_products_table").html("");
+          $.each(data, function(item, val){
+            var item_desc = val[0].description;
+            var item_size = " (Size: " + val[1].name + ")";
+            $("#related_products_table").append("<tr><td>" + item_desc + item_size + "</td></tr>");
+          })
+        }).on('ajax:error',function(e, xhr, status, error){
+          console.log(error);
+        });
+    });
+  });
+</script>

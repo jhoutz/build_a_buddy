@@ -1,4 +1,6 @@
 class ItemVariation < ApplicationRecord
+  include Recommendation
+
   belongs_to :item
   belongs_to :size
   has_many :purchase_order_items

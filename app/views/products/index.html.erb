@@ -1,0 +1,12 @@
+<div style="text-align: center">
+  <h1>Products</h1>
+  <table align="center">
+  <% @items.each do |item| %>
+    <tr>
+      <td>
+        <%= link_to item.product.description, product_path(item.id) %>
+      </td>
+    </tr>
+  <% end %>
+  </table>
+</div>
